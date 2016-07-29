@@ -18,9 +18,10 @@ import com.google.common.collect.Maps;
 
 public class Test {
     
-    private static final String HOME_URL = "http://www.tianyancha.com/";
-    private static final String TONGJI_URL = "http://www.tianyancha.com/tongji/%s.json?random=%s";
-    private static final String COMPANY_URL = "http://www.tianyancha.com/company/%s.json";
+    private static final String HOST = "";
+    private static final String HOME_URL = HOST;
+    private static final String TONGJI_URL = HOST + "tongji/%s.json?random=%s";
+    private static final String COMPANY_URL = HOST + "company/%s.json";
     private static java.net.CookieManager manager = new java.net.CookieManager();
     static {
         manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);  
@@ -62,12 +63,12 @@ public class Test {
         HttpCookie tokkenCookie = new HttpCookie("token", token);
         tokkenCookie.setDomain(".tianyancha.com");
         tokkenCookie.setPath("/");
-        manager.getCookieStore().add(new URI("http://www.tianyancha.com"), tokkenCookie);
+        manager.getCookieStore().add(new URI(HOST), tokkenCookie);
         return token;
     }
     
     private static String getCompanyInfo(String id, String token) throws URISyntaxException {
-        List<HttpCookie> cookies = manager.getCookieStore().get(new URI("http://www.tianyancha.com"));
+        List<HttpCookie> cookies = manager.getCookieStore().get(new URI(HOST));
         for(HttpCookie cookie : cookies) {
             System.out.println(cookie.toString());
         }
@@ -79,8 +80,8 @@ public class Test {
         headers.put("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
         headers.put("CheckError", "check");
         headers.put("Connection", "keep-alive");
-        headers.put("Host", "www.tianyancha.com");
-        headers.put("Referer", "http://www.tianyancha.com/company/" + id);
+        headers.put("Host", HOST);
+        headers.put("Referer", HOST + "company/" + id);
         headers.put("Tyc-From", "normal");
         headers.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
         httpRequest.headers(headers);
@@ -95,7 +96,7 @@ public class Test {
     
     public static void main(String[] args) throws URISyntaxException, InterruptedException {
         getCookies();
-        for(Integer integer = 0; integer < 10; integer++) {
+        for(Integer integer = 0; integer < 1; integer++) {
             String id = "22822";
             String token = getToken(id);
             String companyInfo = getCompanyInfo(id, token);
